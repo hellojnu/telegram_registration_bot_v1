@@ -2,7 +2,7 @@ import requests
 import re
 import time
 
-api_key_sms_activate = '1646f480ef1096036f672fc76240bAA1'
+api_key_sms_activate = 'api_key'
 
 request_ex = r'https://sms-activate.ru/stubs/handler_api.php?api_key=$' + api_key_sms_activate
 
@@ -17,6 +17,7 @@ def get_balance(service):
     except:
         result = re.search(r'\d+', r.text)
     print(f'balance: {result[0]} ₽.')
+    return result[0]
 
 def get_available_numbers(country, operator = None):
     if not operator == None:

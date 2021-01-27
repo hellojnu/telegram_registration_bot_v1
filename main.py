@@ -13,7 +13,7 @@ if __name__ == "__main__":
     func.beautiful_print(" tg_reger_v1 ")
     # account_count = input('how many accounts do you want to create?: ')
     account_count = 1
-
+    service = 'sms-activate'
     for i in range(0, account_count):
         startfile(path_to_telegram_exe)
         func.image_click('start_messagin.png') # жмём Start Messaging
@@ -25,11 +25,11 @@ if __name__ == "__main__":
         func.key_press('tab') # переход на код страны
         sleep(0.5)
         func.key_press('delete') # удаление кода
-        if float(api.get_balance('sms-activate'))<4:
+        if float(api.get_balance(service))<4:
             print('top up balance!')
             break
         # методом проб и ошибок, юзаю 3 страны:
         # рашка с билайном, украина и вьетнам, хаха
         # ru = 0, ua = 1, vt = 10
-        country = api.get_workable_country()
+        country = api.get_workable_country(service)
         #запрос api номера

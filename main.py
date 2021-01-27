@@ -1,5 +1,2 @@
-print('llulele')
-print('dsdasd')
+import pytesseract
 
-print('azaza')
-print('123')

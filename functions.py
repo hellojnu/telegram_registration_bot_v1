@@ -9,6 +9,9 @@ import os
 import signal
 import psutil
 import colorama as color
+from russian_names import RussianNames
+from shutil import copy2
+from data import path_to_created_accounts
 
 names = []
 
@@ -144,9 +147,23 @@ def kill_telegram():
 
 
 def print_out(text):
-    pyautogui.typewrite(text)
-    pyautogui.typewrite('🎁')
-    # sleep(np.random.uniform(0.0001,0.0002))
+    for i in text:
+        pyautogui.typewrite(i)
+
+def create_telegram_exe_and_person():
+    try:
+        person = RussianNames(patronymic=False, output_type='dict', count=1).get_batch()
+        name = person[0]["name"]
+        surname = person[0]["surname"]
+        time = datetime.datetime.now().strftime("%H_%M_%S")
+        os.makedirs(path_to_created_accounts + f'\\{name}_{surname}_{time}')
+        copy2('Telegram.exe', path_to_created_accounts + f'\\{name}_{surname}_{time}')
+        path = path_to_created_accounts + f'\\{name}_{surname}_{time}'
+        return path, name, surname
+    except:
+        pass
+
+
 
 
 def key_press(key):

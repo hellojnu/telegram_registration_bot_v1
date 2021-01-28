@@ -2,7 +2,7 @@ import requests
 import re
 import time
 from data import api_key
-from main import accessible_services
+
 
 def get_balance(service):
     if service == "sms-activate":
@@ -52,13 +52,14 @@ def get_workable_country(service):
                 return country, None
             else:
                 if not printed:
-
-                    if len(accessible_services) == 1:
-                        print(f"there is now free numbers at '{service}'. i'm waitin for number.")
-                        printed = True
-                    elif len(accessible_services) > 1:
-                        print(f"there is now free numbers at '{service}'. try to use another service...")
-                        # придумать переход
+                    print(f"there is now free numbers at '{service}'. i'm waitin for number.")
+                    printed = True
+                    # if len(accessible_services) == 1:
+                    #     print(f"there is now free numbers at '{service}'. i'm waitin for number.")
+                    #     printed = True
+                    # elif len(accessible_services) > 1:
+                    #     print(f"there is now free numbers at '{service}'. try to use another service...")
+                          # придумать переход
                 time.sleep(3)
 
 def buy_number(service, country, operator = None):

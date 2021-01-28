@@ -23,12 +23,12 @@ if __name__ == "__main__":
         for i in range(0, account_count):
             path, name, surname = func.create_telegram_exe_and_person()
             startfile(path + '\\Telegram.exe')
-            func.image_click('start_messagin.png') # жмём Start Messaging
-            func.image_wait('settin.png') # ждём настроек, чтобы проверить на QR-code
+            func.image_click(r'images\start_messagin.png') # жмём Start Messaging
+            func.image_wait(r'images\settin.png') # ждём настроек, чтобы проверить на QR-code
             sleep(0.5)
-            if func.image_wait_once('using_phone_number.png'): # проверка на QR-code
-                func.image_click('using_phone_number.png')
-            func.image_wait('ready_for_input_number.png') # форма ввода номера
+            if func.image_wait_once(r'images\using_phone_number.png'): # проверка на QR-code
+                func.image_click(r'images\using_phone_number.png')
+            func.image_wait(r'images\ready_for_input_number.png') # форма ввода номера
 
             # методом проб и ошибок, юзаю 3 страны:
             # рашка с билайном, украина и вьетнам, хаха
@@ -51,21 +51,21 @@ if __name__ == "__main__":
                         id = response[1]
                         func.print_out(number)  # ввод номера в тг клиент
                         sleep(0.5)
-                        func.image_click('next.png')
+                        func.image_click(r'images\next.png')
                         sleep(1)
                         if not func.image_wait_once('ok.png'):  # проверка на бан номера
-                            func.image_wait('we_have_sent.png')  # ждём ввод смс
+                            func.image_wait(r'images\we_have_sent.png')  # ждём ввод смс
                             code = api.get_sms(id, actual_service)
                             if not code == False:
                                 func.print_out(code)  # ввод кода
-                                func.image_wait('your_info.png')  # ждём ввода имени и фамилии
+                                func.image_wait(r'images\your_info.png')  # ждём ввода имени и фамилии
                                 func.print_out(name) # вводим имя
                                 sleep(0.5)
                                 func.key_press('tab')
                                 sleep(0.5)
                                 func.print_out(surname) # вводим фамилию
-                                func.image_click('sign_up.png')
-                                func.image_wait('menu.png')
+                                func.image_click(r'images\sign_up.png')
+                                func.image_wait(r'images\menu.png')
                                 time = datetime.datetime.now().strftime("%H:%M:%S")
                                 print(f'account created at [{time}]: {number}, {name}, {surname}')
                                 success_order = True
@@ -74,8 +74,8 @@ if __name__ == "__main__":
                                 pass
                         else:
                             print('phone was banned. restart.')
-                            func.image_click('ok.png')
-                            func.image_wait('next.png')
+                            func.image_click(r'images\ok.png')
+                            func.image_wait(r'images\next.png')
                             sleep(0.5)
                             for i in range(0, 20):
                                 func.key_press('backspace')  # удаляем старый номер, переход на новый цикл
@@ -88,21 +88,21 @@ if __name__ == "__main__":
                         id = response[1]
                         func.print_out(number) # ввод номера в тг клиент
                         sleep(0.5)
-                        func.image_click('next.png')
+                        func.image_click(r'images\next.png')
                         sleep(1)
-                        if not func.image_wait_once('ok.png'): # проверка на бан номера
-                            func.image_wait('we_have_sent.png') # ждём ввод смс
+                        if not func.image_wait_once(r'images\ok.png'): # проверка на бан номера
+                            func.image_wait(r'images\we_have_sent.png') # ждём ввод смс
                             code = api.get_sms(id, actual_service)
                             if not code == False:
                                 func.print_out(code) # ввод кода
-                                func.image_wait('your_info.png') # ждём ввода имени и фамилии
+                                func.image_wait(r'images\your_info.png') # ждём ввода имени и фамилии
                                 func.print_out(name)
                                 sleep(0.5)
                                 func.key_press('tab')
                                 sleep(0.5)
                                 func.print_out(surname)
-                                func.image_click('sign_up.png')
-                                func.image_wait('menu.png')
+                                func.image_click(r'images\sign_up.png')
+                                func.image_wait(r'images\menu.png')
                                 time = datetime.datetime.now().strftime("%H:%M:%S")
                                 print(f'account created at [{time}]: {number}, {name}, {surname}')
                                 success_order = True
@@ -111,8 +111,8 @@ if __name__ == "__main__":
                                 pass
                         else:
                             print('phone was banned. restart.')
-                            func.image_click('ok.png')
-                            func.image_wait('next.png')
+                            func.image_click(r'images\ok.png')
+                            func.image_wait(r'images\next.png')
                             sleep(0.5)
                             for i in range(0,20):
                                 func.key_press('backspace') # удаляем старый номер, переход на новый цикл

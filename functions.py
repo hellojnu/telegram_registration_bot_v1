@@ -17,10 +17,10 @@ names = []
 
 
 def beautiful_print(text):
-    length = 30
+    length = 50
     if len(text)%2:
         length+=1
-    print(color.Fore.RED + ('{0:*^' + str(length) +'}').format(text))
+    print(color.Fore.LIGHTGREEN_EX + ('{0:*^' + str(length) +'}').format(text))
 
 def get_list_of_dirs():  # получили список папок
     path = 'D:\\work\\telegram\\аккаунты\\'

@@ -2,7 +2,7 @@
 #pip install opencv-python
 #pip install Pillow
 
-path_to_created_accounts =  r'C:\Users\cyberomanov\Desktop\tg_reger_v1'
+
 
 
 service = {
@@ -12,6 +12,6 @@ service = {
 
 
 api_key = {
-    'sms-activate': 'app',
-    '5sim': 'app'
+    'sms-activate': '1646f480ef1096036f672fc76240bAA1',
+    '5sim': 'de3f53ce486e412f9746ee8ce0f10e62'
 }

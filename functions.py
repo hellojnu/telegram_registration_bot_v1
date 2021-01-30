@@ -11,22 +11,23 @@ import psutil
 import colorama as color
 from russian_names import RussianNames
 from shutil import copy2
-from data import path_to_created_accounts
+
 
 names = []
 
 
 def beautiful_print(text):
-    length = 50
+    length = 70
     if len(text)%2:
         length+=1
-    print(color.Fore.LIGHTGREEN_EX + ('{0:*^' + str(length) +'}').format(text))
+    print(color.Fore.LIGHTMAGENTA_EX + ('{0:*^' + str(length) +'}').format(text))
 
 def get_list_of_dirs():  # получили список папок
     path = 'D:\\work\\telegram\\аккаунты\\'
     global names
     names = [names for names in os.listdir(path)]
     return names
+
 
 
 def click(x, y):
@@ -37,7 +38,7 @@ def click(x, y):
 
 def image_click(image):
     '''Click on the image. Region is the whole screen.'''
-    if pyautogui.locateOnScreen(image, grayscale=True, confidence=0.9) != None:
+    if not pyautogui.locateOnScreen(image, grayscale=True, confidence=0.9) == None:
         x_y = pyautogui.locateOnScreen(image, grayscale=True, confidence=0.9)
         click(x_y[0], x_y[1])
         return True
@@ -45,7 +46,7 @@ def image_click(image):
         time.sleep(0.1)
         image_click(image)
 
-def image_wait_or(image1,image2,region):
+def image_wait_or_region(image1,image2,region):
     '''Wait at least one of two images. Region is the whole screen.'''
     if pyautogui.locateOnScreen(image1, region=region, grayscale=True, confidence=0.9) != None:
         return True
@@ -53,7 +54,17 @@ def image_wait_or(image1,image2,region):
         return True
     else:
         time.sleep(0.1)
-        image_wait_or(image1,image2,region)
+        image_wait_or_region(image1,image2,region)
+
+def image_wait_or(image1,image2):
+    '''Wait at least one of two images. Region is the whole screen.'''
+    if pyautogui.locateOnScreen(image1, grayscale=True, confidence=0.9) != None:
+        return True
+    elif pyautogui.locateOnScreen(image2, grayscale=True, confidence=0.9) != None:
+        return True
+    else:
+        time.sleep(0.1)
+        image_wait_or(image1,image2)
 
 copy_paste = None
 
@@ -124,17 +135,29 @@ def loadin_wait_region(image, region):
         time.sleep(0.1)
         loadin_wait_region(image, region)
 
-def image_wait_once(image):
+def image_wait_once_or(image1, image2):
     '''Check, if the image is on the screen. Region is the whole screen.'''
-    if pyautogui.locateOnScreen(image, grayscale=True, confidence=0.9) != None:
-        return True
-    else:
-        return False
+    try:
+        if pyautogui.locateOnScreen(image1, grayscale=True, confidence=0.9) != None:
+            return True
+    except:
+        try:
+            if pyautogui.locateOnScreen(image2, grayscale=True, confidence=0.9) != None:
+                return True
+        except:
+            return False
 
 
 def image_wait_once_region(image, region):
     '''Check, if the image is in the specific region.'''
     if pyautogui.locateOnScreen(image, region=region, grayscale=True, confidence=0.9) != None:
+        return True
+    else:
+        return False
+
+def image_wait_once(image):
+    '''Check, if the image is in the specific region.'''
+    if pyautogui.locateOnScreen(image, grayscale=True, confidence=0.9) != None:
         return True
     else:
         return False
@@ -156,14 +179,32 @@ def create_telegram_exe_and_person():
         name = person[0]["name"]
         surname = person[0]["surname"]
         time = datetime.datetime.now().strftime("%H_%M_%S")
-        os.makedirs(path_to_created_accounts + f'\\{name}_{surname}_{time}')
-        copy2('Telegram.exe', path_to_created_accounts + f'\\{name}_{surname}_{time}')
-        path = path_to_created_accounts + f'\\{name}_{surname}_{time}'
+        os.makedirs('accounts' + f'\\{name}_{surname}_{time}')
+        copy2('Telegram.exe', r'accounts' + f'\\{name}_{surname}_{time}')
+        path = 'accounts' + f'\\{name}_{surname}_{time}'
         return path, name, surname
     except:
         pass
 
-
+def read_config():
+    api_keys = {}
+    account_counter = 0
+    with open('config.txt', 'r') as f:
+        string = f.read().splitlines()
+    for str in string:
+        if re.match(r'sms-activate',str):
+            key_t = re.search(r'".+"', str)[0]
+            key = re.search(r'\w+', key_t)[0]
+            if len(key) == 32:
+                api_keys["sms-activate"] = key
+        elif re.match(r'5sim',str):
+            key_t = re.search(r'".+"', str)[0]
+            key = re.search(r'\w+', key_t)[0]
+            if len(key) == 32:
+                api_keys["5sim"] = key
+        elif re.match(r'account_counter', str):
+            account_counter = re.search(r'\d+', str)[0]
+    return api_keys, account_counter
 
 
 def key_press(key):

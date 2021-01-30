@@ -1,0 +1,12 @@
+########## [TELEGRAM REGISTRATION BOT V1] ##########
+
+Part #1: Setting up API keys. Bot can interact only with 'sms-activate' and '5sim' services now.
+         Contact t.me/cyberomanov, if you want to add any service into the bot.
+
+sms-activate: "YOUR_API_KEY"
+5sim: "YOUR_API_KEY"
+
+Part #2: How many accounts do you want to create?
+         We recommend you not to create more than 10 accounts using 1 IP-address per session.
+
+account_counter = 1

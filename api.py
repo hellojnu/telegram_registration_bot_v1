@@ -28,7 +28,7 @@ def get_balance(service):
 
         now = datetime.datetime.now().strftime("%H:%M:%S")
 
-        if float(result)<20:
+        if float(result)<15:
             print(color.Fore.LIGHTRED_EX + f"[{now}]-[{i}] >> balance: {result} ₽. top up the balance, please.")
         else:
             print(color.Fore.LIGHTGREEN_EX + f"[{now}]-[{i}] >> balance: {result} ₽.")
@@ -45,22 +45,43 @@ def get_number(accessible_services):
                 #     number = response[2]
                 #     return id, number, 'sms-activate'
                 response = buy_number('sms-activate', 1)
+                try:
+                    if response[1] == 'no_balance':
+                        return False, 'sms-activate'
+                except:
+                    pass
                 if response[0]:
                     id = response[1]
                     number = response[2]
                     return id, number, 'sms-activate'
                 response = buy_number('sms-activate', 10)
+                try:
+                    if response[1] == 'no_balance':
+                        return False, 'sms-activate'
+                except:
+                    pass
                 if response[0]:
                     id = response[1]
                     number = response[2]
                     return id, number, 'sms-activate'
             elif i == '5sim':
                 response = buy_number('5sim', 0)
+                try:
+                    if response[1] == 'no_balance':
+                        return False, '5sim'
+                except:
+                    pass
                 if response[0]:
                     id = response[1]
                     number = response[2]
                     return id, number, '5sim'
+
                 response = buy_number('5sim', 1)
+                try:
+                    if response[1] == 'no_balance':
+                        return False, '5sim'
+                except:
+                    pass
                 if response[0]:
                     id = response[1]
                     number = response[2]
@@ -96,7 +117,6 @@ def buy_number(service, country, operator = None):
             return False, 'no_numbers'
         elif re.search('NO_BALANCE',r.text):
             print(color.Fore.LIGHTRED_EX +  f'[{now}]-[{service}] >> top up balance, please.')
-            #удалить сервис
             return False, 'no_balance'
         elif re.search('ACCESS_NUMBER',r.text):
             id = re.findall('\d+', r.text)[0]
@@ -120,7 +140,6 @@ def buy_number(service, country, operator = None):
             return False, 'no_numbers'
         elif re.search('NO_MEANS', r.text):
             print(color.Fore.LIGHTRED_EX +  f'[{now}]-[{service}] >> top up balance, please.')
-            # удалить сервис
             return False, 'no_balance'
         elif re.search('BAD_KEY', r.text):
             print('bad api_key!')
@@ -143,12 +162,12 @@ sms_wait_count = 0
 def get_sms(service, id):
     global sms_wait_count
     if sms_wait_count < 45:
-        sms_wait_count += 1
+        sms_wait_count += 5
         now = datetime.datetime.now().strftime("%H:%M:%S")
         if service == 'sms-activate':
             r = requests.get(r'https://sms-activate.ru/stubs/handler_api.php?api_key=$' + api_key[service] + f'&action=getFullSms&id=${id}')
             if re.search('STATUS_WAIT_CODE', r.text):
-                time.sleep(1)
+                time.sleep(5)
                 return get_sms(service, id)
             elif re.search(r'FULL_SMS', r.text):
 
@@ -159,7 +178,7 @@ def get_sms(service, id):
         elif service == '5sim':
             r = requests.get(r'http://api2.5sim.net/stubs/handler_api.php?api_key=' + api_key[service] + f'&action=getStatus&id={id}')
             if re.search('STATUS_WAIT_CODE', r.text):
-                time.sleep(1)
+                time.sleep(5)
                 return get_sms(service, id)
             elif re.search(r'STATUS_OK', r.text):
 

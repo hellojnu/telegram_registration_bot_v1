@@ -11,7 +11,8 @@ import psutil
 import colorama as color
 from russian_names import RussianNames
 from shutil import copy2
-
+import pyautogui, pyperclip
+from keyboard import press_and_release
 
 names = []
 
@@ -168,10 +169,22 @@ def kill_telegram():
             os.kill(process.pid, signal.SIGTERM)
 
 
+def paste(text: str):
+    pyperclip.copy(text)
+    press_and_release('ctrl + v')
 
-def print_out(text):
-    for i in text:
-        pyautogui.typewrite(i)
+def print_out(text: str, interval=0.0):
+    buffer = pyperclip.paste()
+    if not interval:
+        paste(text)
+    else:
+        for char in text:
+            paste(char)
+            sleep(interval)
+    pyperclip.copy(buffer)
+    #
+    # for i in text:
+    #     pyautogui.typewrite(i)
 
 def create_telegram_exe_and_person():
     try:
